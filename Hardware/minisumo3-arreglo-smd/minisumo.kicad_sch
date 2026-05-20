@@ -5470,7 +5470,7 @@
 				)
 			)
 		)
-		(property "Footprint" "componentes. pretty(huellas)_mod:TO-220-2"
+		(property "Footprint" "Package_TO_SOT_SMD:TO-263-3_TabPin2"
 			(at 244.221 134.874 0)
 			(effects
 				(font
