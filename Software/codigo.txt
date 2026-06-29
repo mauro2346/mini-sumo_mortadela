@@ -1,15 +1,14 @@
-//motores L293D
 
-#define IN1
-#define IN2
-#define IN3
-#define IN4
 
-#define TRIG
-#define ECHO
+#define IN1 6
+#define IN2 8
+#define IN3 9
+#define IN4 12
 
-//ADELANTE
+#define TRIG 16
+#define ECHO 15
 
+#define OUT 14
 
 
 // ADELANTE
@@ -33,7 +32,7 @@ void Derecha()
 void izquierda()
 {
   digitalWrite(IN1,LOW);
-  digitalWrite(IN2,HGH);
+  digitalWrite(IN2,HIGH);
   digitalWrite(IN3,HIGH);
   digitalWrite(IN4,LOW);
 }
@@ -48,51 +47,64 @@ void Atras()
 
 //SENSORES
 
-int medirdistancia(){
-  digitalwrite(TRIG,LOW);
-  delaymicroseconds(2);
-  digitalwrite(TRIG,HIGH);
-  delaymicroseconds(10);
-  digitalwrite(TRIG,LOW);
+int DISTANCIA(){
+  digitalWrite(TRIG,LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG,LOW);
 
-  DURACION=pulseIn(ECHO,HING,20000);
+   // Leer tiempo de regreso
+  int DURACION = pulseIn(ECHO,HIGH);
 
-  DISTANCIA=DURACION 0.034/2;
-
+  int DISTANCIA = (DURACION * 0.0343)/2;
+  
   return DISTANCIA;
 }
 
 void setup(){
   Serial.begin(9600);
-  pinmode(IN1,OUTPUT);
-  pinmode(IN2,OUTPUT);
-  pinmode(IN3,OUTPUT);
-  pinmode(IN4,OUTPUT);
+  pinMode(IN1,OUTPUT);
+  pinMode(IN2,OUTPUT);
+  pinMode(IN3,OUTPUT);
+  pinMode(IN4,OUTPUT);
+  
+  pinMode(TRIG,OUTPUT);
+  pinMode(ECHO,INPUT);
+  pinMode(OUT,INPUT);
+  Serial.begin(9600);
 
   delay(5000);
 }
 
 void loop(){
   // LECTURA
-  int distancia = medirdistancia();
-  int piso = digitalRead(OUT);
-
+  int sensorDistancia = DISTANCIA();
+  int sensorPiso = digitalRead(OUT);
   
-  if(piso == HIGH){
-    Atras();
-    delay(500);
-    Derecha();
-    delay(500);
-  }
-
-  if(distancia > 0 && distancia < 40){
-    Avanzar();
+  
+  Serial.print("Sensor piso = ");
+  Serial.println(sensorPiso);
+  
+  
+  Serial.print("Sensor distancia = ");
+  Serial.println(sensorDistancia);
+  
+  
+  if(sensorDistancia > 0 && sensorDistancia < 40){
+    Adelante();
   }
   else {
+    DISTANCIA();
     Derecha();
   }
-
+  delay(50);
+  
+  
+  if(sensorPiso == 1){
+    Atras();
+    delay(500);
+  }
 }
-
 
 //PRMETROS
